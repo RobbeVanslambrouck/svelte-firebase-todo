@@ -1,5 +1,11 @@
 import { initializeApp } from "firebase/app";
-import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import {
+  getAuth,
+  GoogleAuthProvider,
+  signInWithPopup,
+  onAuthStateChanged,
+  type User,
+} from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
@@ -16,8 +22,16 @@ const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const googleProvider = new GoogleAuthProvider();
 
-export function login(): void {
+export function signIn(): void {
   signInWithPopup(auth, googleProvider);
+}
+
+export function signOut(): void {
+  auth.signOut();
+}
+
+export function onSignInOrOut(callback: (user: User) => void) {
+  onAuthStateChanged(auth, callback);
 }
 
 export const db = getFirestore(app);
