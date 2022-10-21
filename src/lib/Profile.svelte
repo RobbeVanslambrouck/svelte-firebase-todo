@@ -1,6 +1,7 @@
 <script lang="ts">
   import { user } from "../stores";
   import { signOut } from "../firebase";
+  import avatar from "../assets/avatar.svg";
 
   let dropdownDisplay = "none";
 
@@ -12,7 +13,11 @@
 <div class="dropdown">
   {#if $user}
     <button on:click={ToggleDropDown}>
-      <img src={$user.photoURL} alt="user avatar" />
+      {#if $user.photoURL}
+        <img src={$user.photoURL} alt="user avatar" />
+      {:else}
+        <img src={avatar} alt="default avatar" />
+      {/if}
     </button>
     <div class="dropdown-content" style="display: {dropdownDisplay};">
       <span class="arrow-up" />
