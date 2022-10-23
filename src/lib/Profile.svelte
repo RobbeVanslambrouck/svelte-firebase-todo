@@ -5,6 +5,14 @@
 
   let dropdownDisplay = "none";
 
+  function preload(src) {
+    return new Promise((resolve) => {
+      let img = new Image();
+      img.onload = resolve;
+      img.src = src;
+    });
+  }
+
   function ToggleDropDown(): void {
     dropdownDisplay = dropdownDisplay === "none" ? "flex" : "none";
   }
@@ -13,11 +21,11 @@
 <div class="dropdown">
   {#if $user}
     <button on:click={ToggleDropDown}>
-      {#if $user.photoURL}
-        <img src={$user.photoURL} alt="user avatar" />
-      {:else}
+      {#await preload($user.photoURL)}
         <img src={avatar} alt="default avatar" />
-      {/if}
+      {:then _}
+        <img src={$user.photoURL} alt="user avatar" />
+      {/await}
     </button>
     <div class="dropdown-content" style="display: {dropdownDisplay};">
       <span class="arrow-up" />
