@@ -31,10 +31,15 @@
     padding: 0.5rem;
     border-radius: 0.5rem;
     border: 1px solid black;
+    max-width: 25rem;
   }
 
   h3 {
     margin-right: auto;
+    font-size: 2rem;
+    text-transform: capitalize;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   button {
