@@ -1,24 +1,70 @@
 <script lang="ts">
-  import { createEventDispatcher } from "svelte";
   import type { Todo } from "./Todo";
+  import { todos } from "../stores";
 
   export let todo: Todo;
 
-  const dispatch = createEventDispatcher();
+  let showEditor = false;
+  let savedTitle;
 
   function handleRemove() {
-    dispatch("clickRemove");
+    $todos = $todos.filter((v) => v.id !== todo.id);
   }
 
-  function handleEdit() {
-    dispatch("clickEdit");
+  function startEdit(element) {
+    element.focus();
+    element.select();
+    savedTitle = todo.title;
+  }
+
+  function handleKeyDown(event) {
+    console.log(typeof event.key);
+
+    if (showEditor && event.key === "Escape") {
+      todo.title = savedTitle;
+      showEditor = false;
+    }
   }
 </script>
 
+<svelte:window on:keydown={handleKeyDown} />
+
 <section>
-  <h3>{todo.title}</h3>
-  <button on:click={handleEdit}>✏️</button>
-  <button on:click={handleRemove}>🗑️</button>
+  {#if showEditor}
+    <form
+      on:submit|preventDefault={() => {
+        showEditor = false;
+      }}
+    >
+      <input
+        type="text"
+        id="edit_title"
+        bind:value={todo.title}
+        use:startEdit
+      />
+      <button type="submit">✅</button>
+      <button
+        on:click={() => {
+          todo.title = savedTitle;
+        }}
+        type="submit">❎</button
+      >
+    </form>
+  {:else}
+    <h3
+      on:dblclick={() => {
+        showEditor = true;
+      }}
+    >
+      {todo.title}
+    </h3>
+    <button
+      on:click={() => {
+        showEditor = true;
+      }}>✏️</button
+    >
+    <button on:click={handleRemove}>🗑️</button>
+  {/if}
 </section>
 
 <style>
@@ -48,5 +94,20 @@
     background: none;
     border: none;
     cursor: pointer;
+  }
+
+  form {
+    display: flex;
+    gap: 1rem;
+    width: 100%;
+  }
+
+  input {
+    margin: 0;
+    margin-right: auto;
+    padding: 0 0.5rem;
+    font-size: 1.6rem;
+    width: 100%;
+    box-sizing: border-box;
   }
 </style>

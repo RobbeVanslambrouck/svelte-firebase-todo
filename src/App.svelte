@@ -6,18 +6,6 @@
   import { todos } from "./stores";
 
   let title = "";
-
-  function handleRemove(index: number) {
-    $todos = $todos.filter((v, i) => i !== index);
-  }
-
-  function handleEdit(index: number) {
-    console.log("edit");
-
-    let edit = $todos[index];
-    edit.title = title;
-    $todos[index] = edit;
-  }
 </script>
 
 <div class="app">
@@ -26,15 +14,7 @@
     <AddTodo bind:title />
     <div class="todos">
       {#each $todos as todo, index}
-        <Todo
-          {todo}
-          on:clickRemove={() => {
-            handleRemove(index);
-          }}
-          on:clickEdit={() => {
-            handleEdit(index);
-          }}
-        />
+        <Todo {todo} />
       {/each}
     </div>
   </main>
