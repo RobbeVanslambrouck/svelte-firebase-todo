@@ -5,7 +5,7 @@ export class Todo {
   private _dueDate: Date;
   private _subTodos: Todo[];
   private _isDone = false;
-  private _id: symbol;
+  private _id: number;
 
   private MAX_DESC_LENGTH = 200;
   private MAX_TITLE_LENGTH = 200;
@@ -16,7 +16,7 @@ export class Todo {
     }
     this._title = title;
     this._creationDate = new Date();
-    this._id = Symbol();
+    this._id = Date.now();
   }
 
   public set title(title: string) {
@@ -60,7 +60,10 @@ export class Todo {
     return this._isDone;
   }
 
-  public get id(): symbol {
+  /**
+   * @readonly
+   */
+  public get id(): number {
     return this._id;
   }
 
