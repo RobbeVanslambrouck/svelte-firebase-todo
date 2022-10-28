@@ -1,10 +1,13 @@
 <script lang="ts">
   import { todos } from "../stores";
   import { Todo } from "./Todo";
+  import { addTodoToDb } from "../firebase";
   export let title = "";
 
   function handleAddTodo(event: SubmitEvent) {
-    $todos = [...$todos, new Todo(title)];
+    const todo = new Todo(title);
+    $todos = [...$todos, todo];
+    addTodoToDb(todo);
   }
 </script>
 

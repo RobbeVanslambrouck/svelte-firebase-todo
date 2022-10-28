@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { Todo } from "./Todo";
   import { todos } from "../stores";
+  import { removeTodoFromDb, updateTodoInDb } from "../firebase";
 
   export let todo: Todo;
 
@@ -9,6 +10,18 @@
 
   function handleRemove() {
     $todos = $todos.filter((v) => v.id !== todo.id);
+    removeTodoFromDb(todo);
+  }
+
+  function handleEdit() {
+    showEditor = false;
+    updateTodoInDb(todo);
+  }
+  updateTodoInDb;
+
+  function handleCancelEdit() {
+    todo.title = savedTitle;
+    showEditor = false;
   }
 
   function startEdit(element) {
@@ -18,11 +31,8 @@
   }
 
   function handleKeyDown(event) {
-    console.log(typeof event.key);
-
     if (showEditor && event.key === "Escape") {
-      todo.title = savedTitle;
-      showEditor = false;
+      handleCancelEdit();
     }
   }
 </script>
@@ -31,11 +41,7 @@
 
 <section>
   {#if showEditor}
-    <form
-      on:submit|preventDefault={() => {
-        showEditor = false;
-      }}
-    >
+    <form on:submit|preventDefault={handleEdit}>
       <input
         type="text"
         id="edit_title"
@@ -43,12 +49,7 @@
         use:startEdit
       />
       <button type="submit">✅</button>
-      <button
-        on:click={() => {
-          todo.title = savedTitle;
-        }}
-        type="submit">❎</button
-      >
+      <button on:click={handleCancelEdit} type="button">❎</button>
     </form>
   {:else}
     <h3

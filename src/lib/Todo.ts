@@ -5,7 +5,7 @@ export class Todo {
   private _dueDate: Date;
   private _subTodos: Todo[];
   private _isDone = false;
-  private _id: number;
+  private _id: Symbol;
 
   private MAX_DESC_LENGTH = 200;
   private MAX_TITLE_LENGTH = 200;
@@ -16,7 +16,7 @@ export class Todo {
     }
     this._title = title;
     this._creationDate = new Date();
-    this._id = Date.now();
+    this._id = Symbol("id");
   }
 
   public set title(title: string) {
@@ -41,6 +41,10 @@ export class Todo {
     return this._description;
   }
 
+  public get creationDate(): Date {
+    return this._creationDate;
+  }
+
   public set dueDate(date: Date) {
     if (date < this._creationDate) {
       throw new Error("the todos dueDate can't be before the creationDate");
@@ -63,7 +67,7 @@ export class Todo {
   /**
    * @readonly
    */
-  public get id(): number {
+  public get id(): Symbol {
     return this._id;
   }
 

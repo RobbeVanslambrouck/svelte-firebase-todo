@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { readTodosInDb } from "./firebase";
   import AddTodo from "./lib/AddTodo.svelte";
   import Footer from "./lib/Footer.svelte";
   import Header from "./lib/Header.svelte";
@@ -6,6 +7,8 @@
   import { todos } from "./stores";
 
   let title = "";
+
+  readTodosInDb();
 </script>
 
 <div class="app">
