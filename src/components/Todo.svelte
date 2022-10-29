@@ -51,6 +51,13 @@
       <button on:click={handleCancelEdit} type="button">❎</button>
     </form>
   {:else}
+    <input
+      type="checkbox"
+      bind:checked={todo.isDone}
+      on:change={handleEdit}
+      name="done"
+      id="done"
+    />
     <h3
       on:dblclick={() => {
         showEditor = true;
@@ -109,5 +116,10 @@
     font-size: 1.6rem;
     width: 100%;
     box-sizing: border-box;
+  }
+
+  #done {
+    width: 2rem;
+    height: 2rem;
   }
 </style>
