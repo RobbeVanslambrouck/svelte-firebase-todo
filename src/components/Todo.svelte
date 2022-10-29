@@ -1,7 +1,7 @@
 <script lang="ts">
-  import type { Todo } from "./Todo";
-  import { todos } from "../stores";
-  import { removeTodoFromDb, updateTodoInDb } from "../firebase";
+  import type { Todo } from "../lib/Todo";
+  import { todos, user } from "../stores";
+  import { removeTodoFromDb, updateTodoInDb, onDbchange } from "../firebase";
 
   export let todo: Todo;
 
@@ -9,7 +9,6 @@
   let savedTitle;
 
   function handleRemove() {
-    $todos = $todos.filter((v) => v.id !== todo.id);
     removeTodoFromDb(todo);
   }
 

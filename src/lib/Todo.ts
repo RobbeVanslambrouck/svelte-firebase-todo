@@ -41,6 +41,10 @@ export class Todo {
     return this._description;
   }
 
+  public set creationDate(date: Date) {
+    this._creationDate = date;
+  }
+
   public get creationDate(): Date {
     return this._creationDate;
   }

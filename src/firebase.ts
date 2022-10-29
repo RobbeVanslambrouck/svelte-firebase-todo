@@ -16,8 +16,10 @@ import {
   where,
   getDocs,
   onSnapshot,
+  QuerySnapshot,
+  type DocumentData,
 } from "firebase/firestore";
-import type { Todo } from "./lib/Todo";
+import { Todo } from "./lib/Todo";
 
 const firebaseConfig = {
   apiKey: "AIzaSyD_yuX_1A_pILSP2I6C-gsvESsaeIQ3y3g",
@@ -74,4 +76,26 @@ export async function readTodosInDb() {
   querySnapshot.forEach((doc) => {
     console.log(doc.id, " => ", doc.data());
   });
+}
+
+function dbDataToTodo(data: DocumentData): Todo {
+  const todo = new Todo(data.title);
+  todo.creationDate = new Date(data.created.toDate());
+  todo.isDone = data.completed;
+  return todo;
+}
+
+export async function onDbchange(user: User, onNext: (todos: Todo[]) => void) {
+  try {
+    const q = query(collection(db, "todos"), where("uid", "==", user.uid));
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const todos: Todo[] = [];
+      querySnapshot.forEach((doc) => {
+        todos.push(dbDataToTodo(doc.data()));
+      });
+      onNext(todos);
+    });
+  } catch (error) {
+    console.error("catch", error);
+  }
 }

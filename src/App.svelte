@@ -1,25 +1,29 @@
 <script lang="ts">
-  import { readTodosInDb } from "./firebase";
-  import AddTodo from "./lib/AddTodo.svelte";
-  import Footer from "./lib/Footer.svelte";
-  import Header from "./lib/Header.svelte";
-  import Todo from "./lib/Todo.svelte";
-  import { todos } from "./stores";
+  import { onDbchange } from "./firebase";
+  import AddTodo from "./components/AddTodo.svelte";
+  import Footer from "./components/Footer.svelte";
+  import Header from "./components/Header.svelte";
+  import Todo from "./components/Todo.svelte";
+  import { todos, user } from "./stores";
 
   let title = "";
-
-  readTodosInDb();
 </script>
 
 <div class="app">
   <Header />
   <main>
-    <AddTodo bind:title />
-    <div class="todos">
-      {#each $todos as todo, index}
-        <Todo {todo} />
-      {/each}
-    </div>
+    {#if $user}
+      <AddTodo bind:title />
+      <div class="todos">
+        {#await $todos then}
+          {#each $todos as todo, index}
+            <Todo {todo} />
+          {/each}
+        {/await}
+      </div>
+    {:else}
+      <p>Sign in and go to your todos</p>
+    {/if}
   </main>
   <Footer />
 </div>
